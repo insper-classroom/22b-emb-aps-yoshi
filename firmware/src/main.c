@@ -97,88 +97,7 @@
 #define REST      0
 // fim das notas 
 
-#define BUZZER_PIO				PIOA
-#define BUZZER_PIO_ID			ID_PIOA
-#define BUZZER_PIO_IDX			21
-#define BUZZER_PIO_IDX_MASK     (1 << BUZZER_PIO_IDX)
-
-// Configuracoes do botao
-#define START_PIO				PIOD
-#define START_PIO_ID			ID_PIOD
-#define START_PIO_IDX			28
-#define START_PIO_IDX_MASK		(1 << START_PIO_IDX) 
-
-#define SELECAO_PIO				PIOC
-#define SELECAO_PIO_ID			ID_PIOC
-#define SELECAO_PIO_IDX			31
-#define SELECAO_PIO_IDX_MASK	(1 << SELECAO_PIO_IDX)
-
-/************************************************************************/
-/* prototypes                                                           */
-/************************************************************************/
-
-void init(void);
-int get_startstop(void);
-void set_buzzer(void);
-void clear_buzzer(void);
-int get_selecao(void);
-void buzzer_test();
-
-// funções
-// Função de inicialização do uC
-void init(void){
-	// Initialize the board clock
-	sysclk_init();
-
-	// Desativa WatchDog Timer
-	WDT->WDT_MR = WDT_MR_WDDIS;
-	
-	// Ativa o PIO na qual o BUZZER foi conectado
-	// para que possamos controlar o BUZZER.
-	pmc_enable_periph_clk(BUZZER_PIO_ID);
-	
-	//Inicializa PA21 como saída
-	pio_set_output(BUZZER_PIO, BUZZER_PIO_IDX_MASK, 0, 0, 0);
-	
-	// Inicializa PIO do botao start
-	pmc_enable_periph_clk(START_PIO_ID);
-	// configura pino ligado ao botão start como entrada com um pull-up.
-	pio_set_input(START_PIO, START_PIO_IDX_MASK, PIO_DEFAULT); //CHECK IT LATER
-	pio_pull_up(START_PIO, START_PIO_IDX_MASK, 1);
-	
-	// Inicializa PIO do botao SELECAO
-	pmc_enable_periph_clk(SELECAO_PIO_ID);
-	// configura pino ligado ao botão start como entrada com um pull-up.
-	pio_set_input(SELECAO_PIO, SELECAO_PIO_IDX_MASK, PIO_DEFAULT); //CHECK IT LATER
-	pio_pull_up(SELECAO_PIO, SELECAO_PIO_IDX_MASK, 1);
-}
-int get_startstop(void){
-	return pio_get(START_PIO, PIO_INPUT, START_PIO_IDX_MASK);
-}
-
-void set_buzzer(void){
-	// coloca 1 no pino do BUZZER.
-	pio_set(BUZZER_PIO, BUZZER_PIO_IDX_MASK);
-}
-
-void clear_buzzer(void){
-	// coloca 0 no pino do BUZZER
-	pio_clear(BUZZER_PIO, BUZZER_PIO_IDX_MASK);
-}
-
-int get_selecao(void){
-	return pio_get(SELECAO_PIO, PIO_INPUT, SELECAO_PIO_IDX_MASK);
-}
-
-void buzzer_test(){
-	for (int i = 0 ; i < 20 ; i++){		
-		set_buzzer();
-		delay_ms(1000);
-		clear_buzzer();
-		delay_ms(1000);
-	}
-}
-
+//melody
 int melody[] = {
 
 	// Super Mario Bros theme
@@ -270,6 +189,145 @@ int melody[] = {
 	NOTE_G4,8, NOTE_D4,8, NOTE_E4,-2,
 
 };
+// fim mellody
+
+#define BUZZER_PIO				PIOA
+#define BUZZER_PIO_ID			ID_PIOA
+#define BUZZER_PIO_IDX			21
+#define BUZZER_PIO_IDX_MASK     (1 << BUZZER_PIO_IDX)
+
+// Configuracoes do botao
+#define START_PIO				PIOD
+#define START_PIO_ID			ID_PIOD
+#define START_PIO_IDX			28
+#define START_PIO_IDX_MASK		(1 << START_PIO_IDX) 
+
+#define SELECAO_PIO				PIOC
+#define SELECAO_PIO_ID			ID_PIOC
+#define SELECAO_PIO_IDX			31
+#define SELECAO_PIO_IDX_MASK	(1 << SELECAO_PIO_IDX)
+
+
+// change this to make the song slower or faster
+#define tempo 200;
+// this calculates the duration of a whole note in ms
+int wholenote = (60000 * 4) / tempo; //
+int divider = 0, noteDuration = 0;
+/************************************************************************/
+/* prototypes                                                           */
+/************************************************************************/
+
+void init(void);
+int get_startstop(void);
+void set_buzzer(void);
+void clear_buzzer(void);
+int get_selecao(void);
+void play_song(void);
+void noTone(void);
+
+
+// funções
+// Função de inicialização do uC
+void init(void){
+	// Initialize the board clock
+	sysclk_init();
+
+	// Desativa WatchDog Timer
+	WDT->WDT_MR = WDT_MR_WDDIS;
+	
+	// Ativa o PIO na qual o BUZZER foi conectado
+	// para que possamos controlar o BUZZER.
+	pmc_enable_periph_clk(BUZZER_PIO_ID);
+	
+	//Inicializa PA21 como saída
+	pio_set_output(BUZZER_PIO, BUZZER_PIO_IDX_MASK, 0, 0, 0);
+	
+	// Inicializa PIO do botao start
+	pmc_enable_periph_clk(START_PIO_ID);
+	// configura pino ligado ao botão start como entrada com um pull-up.
+	pio_set_input(START_PIO, START_PIO_IDX_MASK, PIO_DEFAULT); //CHECK IT LATER
+	pio_pull_up(START_PIO, START_PIO_IDX_MASK, 1);
+	
+	// Inicializa PIO do botao SELECAO
+	pmc_enable_periph_clk(SELECAO_PIO_ID);
+	// configura pino ligado ao botão start como entrada com um pull-up.
+	pio_set_input(SELECAO_PIO, SELECAO_PIO_IDX_MASK, PIO_DEFAULT); //CHECK IT LATER
+	pio_pull_up(SELECAO_PIO, SELECAO_PIO_IDX_MASK, 1);
+}
+int get_startstop(void){
+	return pio_get(START_PIO, PIO_INPUT, START_PIO_IDX_MASK);
+}
+
+void set_buzzer(void){
+	// coloca 1 no pino do BUZZER.
+	pio_set(BUZZER_PIO, BUZZER_PIO_IDX_MASK);
+}
+
+void clear_buzzer(void){
+	// coloca 0 no pino do BUZZER
+	pio_clear(BUZZER_PIO, BUZZER_PIO_IDX_MASK);
+}
+
+int get_selecao(void){
+	return pio_get(SELECAO_PIO, PIO_INPUT, SELECAO_PIO_IDX_MASK);
+}
+
+/**
+ * freq: Frequecia em Hz
+ * time: Tempo em ms que o tom deve ser gerado
+ */
+void tone(int freq, int time){ // freq em Hz , time em ms
+	//contar quantos pulsos (freq) existem dentro de um tempo (time) e
+	//então fazer um loop que gere a quantidade de pulsos (na frequência certa).
+	float periodo = 1.0/freq;
+	int quantidade_de_pulsos = (freq*time)/1000;
+	for (int i = 0; i < quantidade_de_pulsos; i++){
+		set_buzzer();
+		delay_us(periodo*500000); //T*10^6/2
+		clear_buzzer();
+		delay_us(periodo*500000); //T*10^6/2
+	}
+}
+
+
+void noTone(void){
+	clear_buzzer();
+}
+
+
+void play_song(void){ //futuramente passar a musica aqui (nome da opção)
+	
+	// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
+	// there are two values per note (pitch and duration), so for each note there are four bytes
+	int notes = sizeof(melody) / sizeof(melody[0]) / 2; //tamanho total/tamanho int *0.5 (pq metade é o tempo das notas)
+	for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) {
+		// calculates the duration of each note
+		divider = melody[thisNote + 1];
+		noteDuration = (wholenote) / abs(divider);
+		if (divider < 0) {
+			noteDuration *= 1.5; // increases the duration in half for dotted notes
+		}
+		// we only play the note for 90% of the duration, leaving 10% as a pause
+		tone(melody[thisNote], noteDuration * 0.9);
+
+		// Wait for the specief duration before playing the next note.
+		delay_ms(noteDuration*0.1);
+
+		// stop the waveform generation before the next note.
+		noTone();
+
+	}
+}
+
+
+
+
+
+
+
+
+
+
 
 
 int main (void)
@@ -284,12 +342,15 @@ int main (void)
 	gfx_mono_ssd1306_init();
   
   // Escreve na tela um circulo e um texto
-	gfx_mono_draw_filled_circle(20, 16, 16, GFX_PIXEL_SET, GFX_WHOLE);
-  gfx_mono_draw_string("mundo", 50,16, &sysfont);
+	//gfx_mono_draw_filled_circle(20, 16, 16, GFX_PIXEL_SET, GFX_WHOLE);
+	gfx_mono_draw_string("teste", 50,16, &sysfont);
 
   /* Insert application code here, after the board has been initialized. */
 	while(1) {
-		
-		buzzer_test();
+		play_song();
+		//tone(1000, 6000);
+		//break;
+			
+		//buzzer_test();
 	}
 }
