@@ -2,8 +2,10 @@
 
 #include "gfx_mono_ug_2832hsweg04.h"
 #include "gfx_mono_text.h"
-#include "musicas.h"
+#include "notes.h"
 #include "sysfont.h"
+#include "mario.h"
+#include "asabranca.h"
 
 // defini??es das notas
 //#define NOTE_B0  31
@@ -245,8 +247,6 @@ int esta_pausado = 0;
 // 
 // // change this to make the song slower or faster
 // #define tempo 200;
-int wholenote = (60000 * 4) / 200; //
-int divider = 0, noteDuration = 0;
 
 int aguardando_play_again = 0;
 int song_number = 1;
@@ -258,14 +258,20 @@ volatile char but_change_song_flag; //
 /* prototypes                                                           */
 /************************************************************************/
 
+typedef struct  {
+	int *notas;
+	int tempo;
+	int notes;
+} Musica;
+
 void init(void);
 int get_startstop(void);
 void set_buzzer(void);
 void clear_buzzer(void);
 int get_selecao(void);
 void play_song_not_working(int melody[], int tempo);
-void play_song_mario(Musica musicas[]);
-void play_song_asa_branca(Musica musicas[]);
+void play_song_mario(Musica musica);
+void play_song_asa_branca(Musica musica);
 
 
 
@@ -423,10 +429,10 @@ void play_song_not_working(int melody[], int tempo){ //futuramente passar a musi
 	}
 }
 
-void play_song_mario(Musica musicas[]){ //futuramente passar a musica aqui (nome da op??o)
-	Musica mario = musicas[0];
-	int notes = sizeof(mario.notas) / sizeof(mario.notas[0]) / 2; //tamanho total/tamanho int *0.5 (pq metade ? o tempo das notas)
-	for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) {
+void play_song_mario(Musica musica){ //futuramente passar a musica aqui (nome da op??o)
+	int wholenote = (60000 * 4) / musica.tempo; //
+	int divider = 0, noteDuration = 0; //tamanho total/tamanho int *0.5 (pq metade ? o tempo das notas)
+	for (int thisNote = 0; thisNote < musica.notes * 2 ; thisNote = thisNote + 2) {
 		if (but_change_song_flag){
 			break;
 		}
@@ -442,13 +448,13 @@ void play_song_mario(Musica musicas[]){ //futuramente passar a musica aqui (nome
 			break;
 		}
 		// calculates the duration of each note
-		divider = mario.notas[thisNote + 1];
+		divider = musica.notas[thisNote + 1];
 		noteDuration = (wholenote) / abs(divider);
 		if (divider < 0) {
 			noteDuration *= 1.5; // increases the duration in half for dotted notes
 		}
 		// we only play the note for 90% of the duration, leaving 10% as a pause
-		tone(mario.notas[thisNote], noteDuration * 0.9);
+		tone(musica.notas[thisNote], noteDuration * 0.9);
 		pio_clear(LED_PIO, LED_PIO_IDX_MASK);
 		// Wait for the specief duration before playing the next note.
 		delay_ms(noteDuration*0.1);
@@ -456,16 +462,15 @@ void play_song_mario(Musica musicas[]){ //futuramente passar a musica aqui (nome
 	}
 }
 
-void play_song_asa_branca(Musica musicas[]){ //futuramente passar a musica aqui (nome da op??o)
-	Musica asa_branca = musicas[1];
+void play_song_asa_branca(Musica musica){ //futuramente passar a musica aqui (nome da op??o)
 	// this calculates the duration of a whole note in ms
-	int wholenote = (60000 * 4) / 120; //
+	int wholenote = (60000 * 4) / musica.tempo; //
 	int divider = 0, noteDuration = 0;
 	
 	// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
 	// there are two values per note (pitch and duration), so for each note there are four bytes
-	int notes = sizeof(asa_branca.notas) / sizeof(asa_branca.notas[0]) / 2; //tamanho total/tamanho int *0.5 (pq metade ? o tempo das notas)
-	for (int thisNote = 0; thisNote < notes * 2; thisNote = thisNote + 2) {
+	 //tamanho total/tamanho int *0.5 (pq metade ? o tempo das notas)
+	for (int thisNote = 0; thisNote < musica.notes * 2; thisNote = thisNote + 2) {
 		if (but_change_song_flag){
 			break;
 		}
@@ -483,13 +488,13 @@ void play_song_asa_branca(Musica musicas[]){ //futuramente passar a musica aqui 
 		
 
 		// calculates the duration of each note
-		divider = asa_branca.notas[thisNote + 1];
+		divider = musica.notas[thisNote + 1];
 		noteDuration = (wholenote) / abs(divider);
 		if (divider < 0) {
 			noteDuration *= 1.5; // increases the duration in half for dotted notes
 		}
 		// we only play the note for 90% of the duration, leaving 10% as a pause
-		tone(asa_branca.notas[thisNote], noteDuration * 0.9);
+		tone(musica.notas[thisNote], noteDuration * 0.9);
 		pio_clear(LED_PIO, LED_PIO_IDX_MASK);
 
 		// Wait for the specief duration before playing the next note.
@@ -522,8 +527,14 @@ int main (void)
 
   // Init OLED
 	gfx_mono_ssd1306_init();
-	Musica musicas[2];
-	musicasArray(musicas);
+	Musica mario, asabranca;
+	mario.notas = &melody_mario;
+	mario.tempo = 200;
+	mario.notes = sizeof(mario.notas) / sizeof(mario.notas[0]) / 2;
+	
+	asabranca.notas = &melody_asa_branca;
+	asabranca.tempo = 120;
+	asabranca.notes = sizeof(asabranca.notas) / sizeof(asabranca.notas[0]) / 2; 
 	gfx_mono_draw_string("mario bros", 0,16, &sysfont);
 	int toca = 0;
 	
@@ -546,12 +557,12 @@ int main (void)
 			but_play_flag = 0;
 			if (song_number==1){
 				atualiza_display();
-				play_song_mario(musicas);
+				play_song_mario(mario);
 			}
 			if (song_number == 2)
 			{
 				atualiza_display();
-				play_song_asa_branca(musicas);
+				play_song_asa_branca(asabranca);
 			}
 		}
 	}
