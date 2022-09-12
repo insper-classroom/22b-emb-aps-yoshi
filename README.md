@@ -25,7 +25,7 @@ TODO: Aualizar pinos
 ![Montagem](img/montagem.jpeg)
 
 ### Estruturação do código
-O código foi organizado com as funções, configurações de pinos e loop principal no main.c enquanto que as músicas utilizadas foram organizadas em arquivos .h, sendo cada música um struct que contém melodia, tempo e quantidade de notas.
+O código foi organizado com as funções, configurações de pinos e loop principal no main.c enquanto que as músicas utilizadas foram organizadas em arquivos .h, sendo cada música um struct que contém melodia, tempo e quantidade de notas. Há apenas uma função para tocar todas as músicas. Ela altera a musica sendo reprodizada conforme o contador de pressionamentos do botão cresce. 
 
 ### Vídeo do projeto
 
