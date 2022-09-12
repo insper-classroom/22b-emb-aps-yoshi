@@ -24,6 +24,9 @@ TODO: Aualizar pinos
 
 ![Montagem](img/montagem.jpeg)
 
+### Estruturação do código
+O código foi organizado com as funções, configurações de pinos e loop principal no main.c enquanto que as músicas utilizadas foram organizadas em arquivos .h, sendo cada música um struct que contém melodia, tempo e quantidade de notas.
+
 ### Vídeo do projeto
 
 Link para vídeo no youtube : https://youtu.be/0WLHlg20Cck
