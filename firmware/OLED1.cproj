@@ -572,7 +572,19 @@
     <Compile Include="src\config\conf_sysfont.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\happybirthday.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\harrypotter.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\jigglypuff.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\mario.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\merrychristmas.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\notes.h">
