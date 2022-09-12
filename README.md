@@ -22,7 +22,7 @@ TODO: Aualizar pinos
 
 ### Imagem da montagem
 
-<src = "img/montagem.jpeg">
+![Montagem](img/montagem.jpeg)
 
 ### Vídeo do projeto
 
