@@ -18,16 +18,20 @@ TODO: Aualizar pinos
 |---------|-----------------|
 | BUZZER  |       PA21      |
 | START   |       PD28      |
-| SELEÇÃO |                 |
+| SELEÇÃO |       PC31      |
 
 ### Imagem da montagem
 
-TODO: Inserir imagem do sistema montado
+<src = "img/montagem.jpeg">
 
 ### Vídeo do projeto
 
-TODO: Inserir link para vídeo do projeto funcionando
-
 ### Músicas e Direitos autorais
 
-TODO: Listar músicas e dar crédio da onde saiu:
+1. Mario Bros Theme          - https://github.com/robsoncouto/arduino-songs/blob/master/supermariobros/supermariobros.ino
+2. Asa Branca - Luiz Gonzaga - https://github.com/robsoncouto/arduino-songs/blob/master/asabranca/asabranca.ino
+3. Jigglypuff Song           - https://github.com/robsoncouto/arduino-songs/blob/master/jigglypuffsong/jigglypuffsong.ino
+4. Harry Potter Theme        - https://github.com/robsoncouto/arduino-songs/blob/master/harrypotter/harrypotter.ino
+5. Happy Birthday            - https://github.com/robsoncouto/arduino-songs/blob/master/happybirthday/happybirthday.ino
+6. Merry Christmas           - https://github.com/robsoncouto/arduino-songs/blob/master/merrychristmas/merrychristmas.ino
+

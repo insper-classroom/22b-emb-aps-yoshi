@@ -6,6 +6,10 @@
 #include "sysfont.h"
 #include "mario.h"
 #include "asabranca.h"
+#include "jigglypuff.h"
+#include "harrypotter.h"
+#include "happybirthday.h"
+#include "merrychristmas.h"
 
 #define BUZZER_PIO				PIOA
 #define BUZZER_PIO_ID			ID_PIOA
@@ -48,10 +52,7 @@ int get_startstop(void);
 void set_buzzer(void);
 void clear_buzzer(void);
 int get_selecao(void);
-void play_song_mario(Musica musica);
-void play_song_asa_branca(Musica musica);
-
-
+void play_song(Musica musica);
 
 // fun??es
 void but_callback(void)
@@ -183,7 +184,7 @@ void limpa_barra(){
 	}
 }
 
-void play_song_mario(Musica musica){ 
+void play_song(Musica musica){ 
 	int wholenote = (60000 * 4) / musica.tempo; //
 	int divider = 0, noteDuration = 0; 
 	for (int thisNote = 0; thisNote < musica.notes * 2 ; thisNote = thisNote + 2) {
@@ -218,62 +219,37 @@ void play_song_mario(Musica musica){
 	}
 }
 
-void play_song_asa_branca(Musica musica){ //futuramente passar a musica aqui (nome da op??o)
-	// this calculates the duration of a whole note in ms
-	int wholenote = (60000 * 4) / musica.tempo; //
-	int divider = 0, noteDuration = 0;
-	
-	// sizeof gives the number of bytes, each int value is composed of two bytes (16 bits)
-	// there are two values per note (pitch and duration), so for each note there are four bytes
-	 //tamanho total/tamanho int *0.5 (pq metade ? o tempo das notas)
-	for (int thisNote = 0; thisNote < musica.notes * 2; thisNote = thisNote + 2) {
-		if (but_change_song_flag){
-			break;
-		}
-		if (but_play_flag){
-			while(but_play_flag == 1){
-				if (but_change_song_flag){
-					break;
-				}
-			}
-			but_play_flag = 0;
-		}
-		if (but_change_song_flag){
-			break;
-		}
-		// calculates the duration of each note
-		divider = musica.notas[thisNote + 1];
-		noteDuration = (wholenote) / abs(divider);
-		
-		unsigned int progress = 124*thisNote / (musica.notes*2);
-		gfx_mono_draw_filled_rect(2, 2, progress, 10, GFX_PIXEL_SET);
-		
-		if (divider < 0) {
-			noteDuration *= 1.5; // increases the duration in half for dotted notes
-		}
-		// we only play the note for 90% of the duration, leaving 10% as a pause
-		tone(musica.notas[thisNote], noteDuration * 0.9);
-		pio_clear(LED_PIO, LED_PIO_IDX_MASK);
-
-		// Wait for the specief duration before playing the next note.
-		delay_ms(noteDuration*0.1);
-		pio_set(LED_PIO, LED_PIO_IDX_MASK);
-	}
-}
-
 
 int atualiza_display(){
 	if(song_number == 1){
 		limpa_barra();
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("1. Mario Bros", 0,16, &sysfont);
-	}else{
-		if (song_number == 2)
-		{	
-			limpa_barra();
-			gfx_mono_draw_string("             ", 0,16, &sysfont);
-			gfx_mono_draw_string("2. Asa Branca", 0,16, &sysfont);
+	}
+	if (song_number == 2){	
+		limpa_barra();
+		gfx_mono_draw_string("             ", 0,16, &sysfont);
+		gfx_mono_draw_string("2. Asa Branca", 0,16, &sysfont);
 		}
+	if (song_number == 3){
+		limpa_barra();
+		gfx_mono_draw_string("             ", 0,16, &sysfont);
+		gfx_mono_draw_string("3. Jigglypuff", 0,16, &sysfont);
+		}
+	if (song_number == 4){
+		limpa_barra();
+		gfx_mono_draw_string("             ", 0,16, &sysfont);
+		gfx_mono_draw_string("4.HarryPotter", 0,16, &sysfont);
+		}
+	if (song_number == 5){
+		limpa_barra();
+		gfx_mono_draw_string("             ", 0,16, &sysfont);
+		gfx_mono_draw_string("5. HappyB", 0,16, &sysfont);
+	}
+	if (song_number == 6){
+		limpa_barra();
+		gfx_mono_draw_string("             ", 0,16, &sysfont);
+		gfx_mono_draw_string("6. MerryC", 0,16, &sysfont);
 	}
 }
 
@@ -291,7 +267,8 @@ int main (void)
 	gfx_mono_draw_string("para tocar!", 0,16, &sysfont);
 
 	int toca = 0;
-	Musica mario, asabranca;
+	Musica mario, asabranca, jigglypuff, harrypotter, happybirthday, merrychristmas;
+	
 	mario.notas = &melody_mario;
 	mario.tempo = 200;
 	mario.notes = sizeof(melody_mario) / sizeof(melody_mario[0]) / 2;
@@ -300,12 +277,28 @@ int main (void)
 	asabranca.tempo = 120;
 	asabranca.notes = sizeof(melody_asa_branca) / sizeof(melody_asa_branca[0]) / 2;
 	
+	jigglypuff.notas = &melody_jigglypuff;
+	jigglypuff.tempo = 85;
+	jigglypuff.notes = sizeof(melody_jigglypuff) / sizeof(melody_jigglypuff[0]) / 2;
+	
+	harrypotter.notas = &melody_harrypotter;
+	harrypotter.tempo = 144;
+	harrypotter.notes = sizeof(melody_harrypotter) / sizeof(melody_harrypotter[0]) / 2;
+	
+	happybirthday.notas = &melody_happybirthday;
+	happybirthday.tempo = 140;
+	happybirthday.notes = sizeof(melody_happybirthday) / sizeof(melody_happybirthday[0]) / 2;
+	
+	merrychristmas.notas = &melody_merrychristmas;
+	merrychristmas.tempo = 140;
+	merrychristmas.notes = sizeof(melody_merrychristmas) / sizeof(melody_merrychristmas[0]) / 2;
+	
   /* Insert application code here, after the board has been initialized. */
 	while(1) {
 	
 		if(but_change_song_flag){
 			but_change_song_flag = 0;
-			if(song_number <2){
+			if(song_number < 7){
 				song_number += 1;
 			}else{
 				song_number = 1;
@@ -316,12 +309,32 @@ int main (void)
 			but_play_flag = 0;
 			if (song_number==1){
 				atualiza_display();
-				play_song_mario(mario);
+				play_song(mario);
 			}
 			if (song_number == 2)
 			{
 				atualiza_display();
-				play_song_asa_branca(asabranca);
+				play_song(asabranca);
+			}
+			if (song_number == 3)
+			{
+				atualiza_display();
+				play_song(jigglypuff);
+			}
+			if (song_number == 4)
+			{
+				atualiza_display();
+				play_song(harrypotter);
+			}
+			if (song_number == 5)
+			{
+				atualiza_display();
+				play_song(happybirthday);
+			}
+			if (song_number == 6)
+			{
+				atualiza_display();
+				play_song(merrychristmas);
 			}
 		}
 	}
