@@ -226,27 +226,27 @@ int atualiza_display(){
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("1. Mario Bros", 0,16, &sysfont);
 	}
-	if (song_number == 2){	
+	else if (song_number == 2){	
 		limpa_barra();
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("2. Asa Branca", 0,16, &sysfont);
 		}
-	if (song_number == 3){
+	else if (song_number == 3){
 		limpa_barra();
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("3. Jigglypuff", 0,16, &sysfont);
 		}
-	if (song_number == 4){
+	else if (song_number == 4){
 		limpa_barra();
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("4.HarryPotter", 0,16, &sysfont);
 		}
-	if (song_number == 5){
+	else if (song_number == 5){
 		limpa_barra();
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("5. HappyB", 0,16, &sysfont);
 	}
-	if (song_number == 6){
+	else if (song_number == 6){
 		limpa_barra();
 		gfx_mono_draw_string("             ", 0,16, &sysfont);
 		gfx_mono_draw_string("6. MerryC", 0,16, &sysfont);

@@ -26,6 +26,8 @@ TODO: Aualizar pinos
 
 ### Vídeo do projeto
 
+Link para vídeo no youtube : https://youtu.be/0WLHlg20Cck
+
 ### Músicas e Direitos autorais
 
 1. Mario Bros Theme          - https://github.com/robsoncouto/arduino-songs/blob/master/supermariobros/supermariobros.ino
