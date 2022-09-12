@@ -569,6 +569,12 @@
     <Compile Include="src\config\conf_sysfont.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\musica.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\musica.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\oled\gfx_mono.h">
       <SubType>compile</SubType>
     </Compile>
