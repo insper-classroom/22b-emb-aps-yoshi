@@ -5,14 +5,14 @@
  * Created: 11/09/2022 19:12:43
  *  Author: lidia
  */ 
+#include <asf.h>
+#include "notes.h"
 
 #ifndef MARIO_H_
 #define MARIO_H_
 
-#include <asf.h>
-#include "notes.h"
 
-int melody_mario[] = {
+const int melody_mario[] = {
 	// Super Mario Bros theme
 	// Score available at https://musescore.com/user/2123/scores/2145
 	// Theme by Koji Kondo

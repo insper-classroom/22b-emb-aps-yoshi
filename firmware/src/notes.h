@@ -7,8 +7,8 @@
  */ 
 // Defines:
 #include <asf.h>
-#ifndef NOTAS_H_
-#define NOTAS_H_
+#ifndef NOTES_H_
+#define NOTES_H_
 // definicoes das notas
 #define NOTE_B0  31
 #define NOTE_C1  33
@@ -103,7 +103,7 @@
 // fim das notas
 
 
-#endif /* NOTAS_H_ */
+#endif /* NOTES_H_ */
 
 
 

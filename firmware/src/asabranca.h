@@ -5,14 +5,14 @@
  * Created: 11/09/2022 19:14:09
  *  Author: lidia
  */ 
+#include <asf.h>
+#include "notes.h"
 
 #ifndef ASABRANCA_H_
 #define ASABRANCA_H_
 
-#include <asf.h>
-#include "notes.h"
 
-int melody_asa_branca[] = {
+const int melody_asa_branca[] = {
 
 	// Asa branca - Luiz Gonzaga
 	// Score available at https://musescore.com/user/190926/scores/181370
