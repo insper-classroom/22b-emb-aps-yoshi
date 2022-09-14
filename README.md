@@ -16,18 +16,27 @@ TODO: Aualizar pinos
 
 | Função  | PINO (ex: PA11) |
 |---------|-----------------|
-| BUZZER  |                 |
-| START   |                 |
-| SELEÇÃO |                 |
+| BUZZER  |       PA21      |
+| START   |       PD28      |
+| SELEÇÃO |       PC31      |
 
 ### Imagem da montagem
 
-TODO: Inserir imagem do sistema montado
+![Montagem](img/montagem.jpeg)
+
+### Estruturação do código
+O código foi organizado com as funções, configurações de pinos e loop principal no main.c enquanto que as músicas utilizadas foram organizadas em arquivos .h, sendo cada música um struct que contém melodia, tempo e quantidade de notas. Há apenas uma função para tocar todas as músicas. Ela altera a musica sendo reprodizada conforme o contador de pressionamentos do botão cresce. 
 
 ### Vídeo do projeto
 
-TODO: Inserir link para vídeo do projeto funcionando
+Link para vídeo no youtube : https://youtu.be/0WLHlg20Cck
 
 ### Músicas e Direitos autorais
 
-TODO: Listar músicas e dar crédio da onde saiu:
+1. Mario Bros Theme          - https://github.com/robsoncouto/arduino-songs/blob/master/supermariobros/supermariobros.ino
+2. Asa Branca - Luiz Gonzaga - https://github.com/robsoncouto/arduino-songs/blob/master/asabranca/asabranca.ino
+3. Jigglypuff Song           - https://github.com/robsoncouto/arduino-songs/blob/master/jigglypuffsong/jigglypuffsong.ino
+4. Harry Potter Theme        - https://github.com/robsoncouto/arduino-songs/blob/master/harrypotter/harrypotter.ino
+5. Happy Birthday            - https://github.com/robsoncouto/arduino-songs/blob/master/happybirthday/happybirthday.ino
+6. Merry Christmas           - https://github.com/robsoncouto/arduino-songs/blob/master/merrychristmas/merrychristmas.ino
+
